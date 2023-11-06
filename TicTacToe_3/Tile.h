@@ -4,60 +4,43 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-
+#include "EColor.h"
 #include "Tile.generated.h"
 
-UENUM(BlueprintType)
-enum class EColor : uint8{
-		White,
-		Red,
-		Blue
-	};
-
+class AChessPiece;
 UCLASS()
-class TICTACTOE_3_API ATile : public AActor
+class CHESSAI_3_API ATile : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
+	struct s_Move {
+		AChessPiece* piece;
+		ATile* targetTile;
+		int score;
+	};
 	// Sets default values for this actor's properties
 	ATile();
 	virtual void Tick(float DeltaTime) override;
-
+	int getX() const;
+	int getY() const;
 	UFUNCTION(BlueprintCallable)
-	EColor GetColor() const;
-
+	EColor getColor() const;
 	UFUNCTION(BlueprintCallable)
-	void SetColor(EColor new_color);
-
+	void AcceptPiece();
+	void HighlightTile();
 	UFUNCTION(BlueprintCallable)
-	void setOptions();
-
+	void MakeAIMove();
 	UFUNCTION(BlueprintCallable)
-	ATile* selectTile();
+	void MakeAIMove2();
 
 
-	UFUNCTION(BlueprintCallable)
-	ATile* selectTile2();
-
-
-	UFUNCTION(BlueprintCallable)
-	void PlayerChooseTile();
-
-	UFUNCTION(BlueprintCallable)
-	void AIChooseTile();
-
-	UFUNCTION(BlueprintCallable)
-	bool Won(EColor color) const;
-
-	int ScoreBoard() const;
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* m_mesh;
+private:
 
 	UPROPERTY(EditAnywhere)
 	int m_x;
@@ -65,16 +48,13 @@ protected:
 	UPROPERTY(EditAnywhere)
 	int m_y;
 
-	UPROPERTY(BlueprintReadWrite)
-	TArray<ATile*> m_board;
+	class ABoard* m_board;
+
+
 
 	UPROPERTY(EditAnywhere)
-	EColor m_color = EColor::White;
+	EColor m_color;
 
 
-	TArray<ATile*> m_options;
-
-	UPROPERTY(BlueprintReadWrite)
-	int options_size;
 
 };
